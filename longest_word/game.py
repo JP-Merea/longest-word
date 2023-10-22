@@ -3,6 +3,7 @@
 
 import random
 import string
+import requests
 
 
 class Game:
@@ -21,6 +22,13 @@ class Game:
                     grid_copy.remove(letter) # remove the letter from the grid
                 else:
                     return False # if the letter is not in the grid
-            return True # if all the letters are in the grid
+            return self.__check_dictionary(word) # if all the letters are in the grid
         else:
             return False #if the word is empty
+
+    @staticmethod
+    def __check_dictionary(word) -> bool:
+        """Return True if and only if the word is in the english dictionary"""
+        response = requests.get(f"https://wagon-dictionary.herokuapp.com/{word}")
+        json_response = response.json()
+        return json_response['found']
